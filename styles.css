@@ -1,0 +1,88 @@
+/* Set the font and background color for the body */
+body {
+    font-family: 'Helvetica', sans-serif;
+    background-color: #d4e9d4; /* Light pastel green */
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Style the headline */
+.headline {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Style the copy button */
+.copy-button {
+    padding: 10px 20px;
+    background-color: #007BFF; /* Blue color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 20px; /* Space between button and emoji grid */
+}
+
+.copy-button:hover {
+    background-color: #0056b3; /* Darker blue shade for hover effect */
+}
+
+/* Style the current chunk paragraph */
+#currentChunk {
+    font-size: 1.2rem;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Style the input container */
+.input-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Style the input boxes */
+input[type="text"] {
+    width: 80px; /* Less wide, more square-shaped */
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+/* Style the button */
+button {
+    padding: 10px 20px;
+    background-color: #6abf69; /* Complementary green shade */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #5aa960; /* Darker shade for hover effect */
+}
+
+/* Style the emoji grid */
+.emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(8, auto);
+    gap: 10px; /* Add space between emojis */
+    width: fit-content;
+    margin: 0 auto;
+    margin-bottom: 20px; /* Add space between the grid and the current chunk paragraph */
+}
+
+/* Style the emoji cells */
+.emoji-cell {
+    font-size: 2rem;
+    text-align: center;
+}
