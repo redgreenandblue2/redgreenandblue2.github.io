@@ -9,6 +9,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const threshold = 0.1;
     const scale = 70.0;
 
+    // Function to generate a pseudo-random number from a seed using SHA-256
+    function sha256(seed) {
+        // Create a SHA-256 hash object
+        const sha256hash = CryptoJS.SHA256(seed.toString());
+
+        // Convert the hash to a hexadecimal string
+        const hashString = sha256hash.toString(CryptoJS.enc.Hex);
+
+        // Extract a portion of the hash string to use as the random number
+        const randomNumberString = hashString.substring(0, 15);
+
+        // Convert the hexadecimal string to a floating-point number between 0 and 1
+        const randomNumber = parseInt(randomNumberString, 16) / Math.pow(16, randomNumberString.length);
+
+        return randomNumber;
+    }
+
+
     function fade(t) {
         return t * t * t * (t * (t * 6 - 15) + 10);
     }
@@ -26,8 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function perlinNoise2D(x, y, seed) {
         const p = Array.from({ length: 256 }, (_, i) => i);
-        Math.seedrandom(seed);
-        p.sort(() => Math.random() - 0.5);
+        p.sort(() => sha256(seed) - 0.5);
         p.push(...p);
 
         const xi = Math.floor(x) & 255;
@@ -56,8 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function diamondChunk(x, y) {
         const chunkSeed = x * 31 + y * 37;
-        Math.seedrandom(chunkSeed);
-        return Math.floor(Math.random() * 6) === 0 ? 1 : 0;
+        return Math.floor(sha256(chunkSeed) * 6) === 0 ? 1 : 0;
     }
 
     function getTileContentAtCoordinate(x, y, threshold, scale, seed) {
@@ -68,8 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (noiseValue > threshold) {
             if (stoneNoise > threshold * 2) {
                 if (diamondChunk(Math.floor(x / 8), Math.floor((y - 1) / 8)) === 1) {
-                    Math.seedrandom(x * 8 + y);
-                const isTree = Math.random() < 0.05; // Adjust probability as needed
+                const isTree = sha256(x * 8 + y) < 0.05; // Adjust probability as needed
                 console.log(`Is Tree at (${x}, ${y}): ${seed}`);
                 // Math.seedrandom(originalSeed);
                 return isTree ? '💎' : '🪨';
@@ -77,8 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return '🪨';  // Stones
             } else {
                 // Random chance for tree or land
-                Math.seedrandom(x * 8 + y);
-                const isTree = Math.random() < 0.15; // Adjust probability as needed
+                const isTree = sha256(x * 8 + y) < 0.15; // Adjust probability as needed
                 console.log(`Is Tree at (${x}, ${y}): ${seed}`);
                 // Math.seedrandom(originalSeed);
                 return isTree ? '🌲' : '🟩';
@@ -104,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             clipboardContent += '\n';
         }
-        currentChunk.textContent = `Currently displaying chunk (${x / 8 - 1}, ${y / 8})`;
+        currentChunk.textContent = `Currently displaying chunk (${x / 8 - 4}, ${y / 8})`;
 
         // Add event listener for copy button
         copyButton.onclick = () => {
@@ -119,13 +133,13 @@ document.addEventListener('DOMContentLoaded', function() {
     generateButton.addEventListener('click', () => {
         const chunkX = parseInt(chunkXInput.value) || 0;
         const chunkY = parseInt(chunkYInput.value) || 0;
-        const x = (chunkX + 1) * 8;
+        const x = (chunkX + 4) * 8;
         const y = chunkY * 8;
         printBoard(x, y, seed, 8);
     });
 
     // Start with chunk (0, 0)
-    const x = 8;
+    const x = 8 * 4;
     const y = 0;
     const vision = 8;
 
