@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return randomNumber;
     }
 
-
     function fade(t) {
         return t * t * t * (t * (t * 6 - 15) + 10);
     }
@@ -77,32 +76,25 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function getTileContentAtCoordinate(x, y, threshold, scale, seed) {
-        const originalSeed = seed; // Store the original seed
         const noiseValue = generatePerlinNoiseAtCoordinate(x, y, scale, seed);
         const stoneNoise = generatePerlinNoiseAtCoordinate(x, y, scale / 2, seed + 1);
-    
+
         if (noiseValue > threshold) {
             if (stoneNoise > threshold * 2) {
                 if (diamondChunk(Math.floor(x / 8), Math.floor((y - 1) / 8)) === 1) {
-                const isTree = sha256(x * 8 + y) < 0.05; // Adjust probability as needed
-                console.log(`Is Tree at (${x}, ${y}): ${seed}`);
-                // Math.seedrandom(originalSeed);
-                return isTree ? '💎' : '🪨';
+                    const isTree = Math.random() < 0.05; // Adjust probability as needed
+                    return isTree ? '💎' : '🪨';
                 }
                 return '🪨';  // Stones
             } else {
                 // Random chance for tree or land
-                const isTree = sha256(x * 8 + y) < 0.15; // Adjust probability as needed
-                console.log(`Is Tree at (${x}, ${y}): ${seed}`);
-                // Math.seedrandom(originalSeed);
+                const isTree = Math.random() < 0.15; // Adjust probability as needed
                 return isTree ? '🌲' : '🟩';
-                // return '🟩';
             }
         } else {
             return '🟦';  // Water
         }
     }
-    
 
     function printBoard(x, y, seed, vision) {
         emojiContainer.innerHTML = '';  // Clear the previous grid
